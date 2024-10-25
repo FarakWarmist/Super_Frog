@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -7,14 +8,19 @@ public class Player : MonoBehaviour
     public Camera playerCam;
     Rigidbody2D rb;
     public float speed = 5f;
-    public float jumpPower = 100f;
+    public float jumpPower = 250f;
     SpriteRenderer spriteRenderer;
+    public Vector3 initialPos;
+
+    public float pv = 100f;
+    public TMP_Text pvText;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         playerCam = Camera.main;
+        initialPos = transform.position;
     }
 
     private void Update()
@@ -37,5 +43,14 @@ public class Player : MonoBehaviour
         {
             spriteRenderer.flipX = x < 0;
         }
+
+        GameOver gameOver = FindAnyObjectByType<GameOver>();
+        pv -= Time.deltaTime;
+        pvText.text = $"PV: {(int)pv}";
+        if (pv < 0)
+        {
+            gameOver.GetGameOver();
+        }
     }
+
 }
